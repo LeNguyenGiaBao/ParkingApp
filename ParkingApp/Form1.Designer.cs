@@ -32,6 +32,7 @@ namespace ParkingApp
         private void InitializeComponent()
         {
             this.pnNameApp = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.lbName = new System.Windows.Forms.Label();
             this.pnMain = new System.Windows.Forms.Panel();
             this.pic4 = new System.Windows.Forms.PictureBox();
@@ -57,6 +58,7 @@ namespace ParkingApp
             // pnNameApp
             // 
             this.pnNameApp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(242)))), ((int)(((byte)(216)))));
+            this.pnNameApp.Controls.Add(this.button1);
             this.pnNameApp.Controls.Add(this.lbName);
             this.pnNameApp.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnNameApp.Location = new System.Drawing.Point(0, 0);
@@ -64,6 +66,16 @@ namespace ParkingApp
             this.pnNameApp.Name = "pnNameApp";
             this.pnNameApp.Size = new System.Drawing.Size(1345, 56);
             this.pnNameApp.TabIndex = 13;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1169, 27);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // lbName
             // 
@@ -95,6 +107,7 @@ namespace ParkingApp
             // 
             // pic4
             // 
+            this.pic4.BackgroundImage = global::ParkingApp.Properties.Resources.ra;
             this.pic4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pic4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pic4.Location = new System.Drawing.Point(1031, 267);
@@ -107,8 +120,8 @@ namespace ParkingApp
             // 
             // pic3
             // 
+            this.pic3.BackgroundImage = global::ParkingApp.Properties.Resources.ra;
             this.pic3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pic3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pic3.Location = new System.Drawing.Point(699, 267);
             this.pic3.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.pic3.Name = "pic3";
@@ -119,8 +132,8 @@ namespace ParkingApp
             // 
             // pic2
             // 
+            this.pic2.BackgroundImage = global::ParkingApp.Properties.Resources.vao;
             this.pic2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pic2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pic2.Location = new System.Drawing.Point(358, 267);
             this.pic2.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.pic2.Name = "pic2";
@@ -131,8 +144,8 @@ namespace ParkingApp
             // 
             // pic1
             // 
+            this.pic1.BackgroundImage = global::ParkingApp.Properties.Resources.vao;
             this.pic1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pic1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pic1.Location = new System.Drawing.Point(14, 267);
             this.pic1.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.pic1.Name = "pic1";
@@ -143,8 +156,8 @@ namespace ParkingApp
             // 
             // cam4
             // 
+            this.cam4.BackgroundImage = global::ParkingApp.Properties.Resources.camera;
             this.cam4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.cam4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cam4.Location = new System.Drawing.Point(1031, 19);
             this.cam4.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.cam4.Name = "cam4";
@@ -155,8 +168,8 @@ namespace ParkingApp
             // 
             // cam2
             // 
+            this.cam2.BackgroundImage = global::ParkingApp.Properties.Resources.camera;
             this.cam2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.cam2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cam2.Location = new System.Drawing.Point(358, 19);
             this.cam2.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.cam2.Name = "cam2";
@@ -167,8 +180,8 @@ namespace ParkingApp
             // 
             // cam3
             // 
+            this.cam3.BackgroundImage = global::ParkingApp.Properties.Resources.camera;
             this.cam3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.cam3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cam3.Location = new System.Drawing.Point(699, 19);
             this.cam3.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.cam3.Name = "cam3";
@@ -180,8 +193,8 @@ namespace ParkingApp
             // cam1
             // 
             this.cam1.BackColor = System.Drawing.SystemColors.Control;
+            this.cam1.BackgroundImage = global::ParkingApp.Properties.Resources.camera;
             this.cam1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.cam1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cam1.Location = new System.Drawing.Point(14, 19);
             this.cam1.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.cam1.Name = "cam1";
@@ -203,6 +216,7 @@ namespace ParkingApp
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ParkingLot";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.pnNameApp.ResumeLayout(false);
             this.pnNameApp.PerformLayout();
             this.pnMain.ResumeLayout(false);
@@ -230,5 +244,6 @@ namespace ParkingApp
         private PictureBox pic3;
         private PictureBox pic2;
         private PictureBox pic1;
+        private Button button1;
     }
 }

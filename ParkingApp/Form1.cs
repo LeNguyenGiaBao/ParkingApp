@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,17 +16,17 @@ namespace ParkingApp
     public partial class Form1 : Form
     {
 
+        private Image[] list_image = new Image[1000];
+        int list_image_count = 0;
+
         int _WIDTH_SCREEN = Screen.PrimaryScreen.Bounds.Width;
         int _HEIGHT_SCREEN = Screen.PrimaryScreen.Bounds.Height;
 
-        string ip1 = @"http://192.168.1.2:4747/video/mjpegfeed?1920x1080";
-        string ip2 = @"http://192.168.1.5:4747/video/mjpegfeed?1920x1080";
+        string ip1 = @"http://192.168.43.42:8080/videofeed";///video/mjpegfeed?1920x1080";
+        string ip2 = @"http://192.168.43.1:8080/videofeed";///mjpegfeed?1920x1080";
         string ip3 = @"http://192.168.1.7:4747/video/mjpegfeed?1920x1080";
-        //string ip4 = @"http://192.168.1.2:4747/video/mjpegfeed?1920x1080";
+        string ip4 = @"http://192.168.1.2:4747/video/mjpegfeed?1920x1080";
 
-
-
-        //MJPEGStream stream;
 
 
         public Form1()
@@ -71,13 +73,21 @@ namespace ParkingApp
             this.pic4.Location = new Point(3 * _picture_size + 4 * slit, _picture_size + 2 * slit);
         }
 
+        #region Cam1
         void LoadCam1()
         {
             MJPEGStream stream1 = new MJPEGStream(ip1);
             stream1.NewFrame += Stream1_NewFrame;
             stream1.Start();
         }
+        private void Stream1_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
+            cam1.Image = bmp;
+        }
+        #endregion
 
+        #region Cam2
         void LoadCam2()
         {
             MJPEGStream stream2 = new MJPEGStream(ip2);
@@ -85,6 +95,14 @@ namespace ParkingApp
             stream2.Start();
         }
 
+        private void Stream2_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
+            cam2.Image = bmp;
+        }
+        #endregion
+
+        #region Cam3
         void LoadCam3()
         {
             MJPEGStream stream3 = new MJPEGStream(ip3);
@@ -92,23 +110,27 @@ namespace ParkingApp
             stream3.Start();
         }
 
-        private void Stream1_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
-            Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
-            cam1.Image = bmp;
-        }
-
-        private void Stream2_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
-            Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
-            cam2.Image = bmp;
-        }
-
         private void Stream3_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
             cam3.Image = bmp;
         }
+        #endregion
+
+        #region Cam4
+        void LoadCam4()
+        {
+            MJPEGStream stream4 = new MJPEGStream(ip4);
+            stream4.NewFrame += Stream4_NewFrame;
+            stream4.Start();
+        }
+
+        private void Stream4_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            Bitmap bmp = (Bitmap)eventArgs.Frame.Clone();
+            cam4.Image = bmp;
+        }
+        #endregion
 
         private void start_camera()
         {
@@ -126,14 +148,74 @@ namespace ParkingApp
             Thread t3 = new Thread(ts3);
             t3.IsBackground = true;
             t3.Start();
+
+            ThreadStart ts4 = new ThreadStart(LoadCam4);
+            Thread t4 = new Thread(ts4);
+            t4.IsBackground = true;
+            t4.Start();
         }
 
+        public void save_image_to_disk(string folder_path)
+        {
+            if (list_image_count == 0 || list_image.Length == 0)
+            {
+                return;
+            }
+            for (int i = 0; i < list_image_count; i++)
+            {
+                try
+                {
+                    System.Drawing.Image img = (Image)list_image[i];
+                    //MessageBox.Show(img.ToString());
+                    var img_save = new Bitmap(img);
+                    img_save.Save(folder_path + i.ToString() + ".jpg", ImageFormat.Jpeg);
+                }
+                catch { }
+            }
+        }
+
+        public void save_temp_image_by_cam(object cam)
+        {
+            try
+            {
+                this.list_image[list_image_count] = ((PictureBox)cam).Image;
+                list_image_count++;
+            }
+            catch { }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            ThreadStart ts = new ThreadStart(LoadCam1);
-            Thread t = new Thread(ts);
-            t.IsBackground = true;
-            t.Start();
+            save_temp_image_by_cam(cam1);
+            save_temp_image_by_cam(cam2);
+            //MessageBox.Show(cam1.Image.Size.ToString());
+            //byte[] ar = imageToByteArray(cam1.Image);
+            //object img = cam1.Image;
+
+            //this.list_image[list_image_count] = cam1.Image;
+            //list_image_count++;
+            //MessageBox.Show(dem.ToString());
+            //Image img = byteArrayToImage(ar);
+            //img.Save(@"E:\2.png", ImageFormat.Png);
+        }
+
+        //public Image byteArrayToImage(byte[] byteArrayIn)
+        //{
+        //    MemoryStream ms = new MemoryStream(byteArrayIn);
+        //    Image returnImage = Image.FromStream(ms);
+        //    return returnImage;
+        //}
+
+
+        //public byte[] imageToByteArray(System.Drawing.Image imageIn)
+        //{
+        //    MemoryStream ms = new MemoryStream();
+        //    imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+        //    return ms.ToArray();
+        //}
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            save_image_to_disk(@"E:\Python\Hinh\");
         }
     }
 }
